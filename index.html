@@ -271,7 +271,7 @@ const cards = S.map((s, i) => {
   const scan = `${esc(s[4])} <em>→ ${esc(s[5])}</em>`;
   const path = `${esc(pipeOf(s[1]))} &gt; ${esc(PHASES[s[1]].replace(/^\d+\s+/, ""))}`;
   const id = `<div class="id">${path} &gt; <b>${esc(s[3])}</b></div>`;   // small tiles: path and step name
-  const crumb = `<div class="id">${path}</div>`;                        // focused card: path only, the title is the heading
+  const crumb = `<div class="id">${path} &gt;</div>`;                       // focused card: path only, the title is the heading
   const kind = kindName(s);
   const lbl = s[2]==="admin" ? "Admin step · closed in this demo" : s[2]==="pointer" ? "Runs on the Liftoff pipeline"
             : "Live session · " + esc(s[8]) + " · closed in this demo";
