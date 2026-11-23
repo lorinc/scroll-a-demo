@@ -65,7 +65,8 @@ body{
 .inner{position:absolute; inset:0; display:flex}
 .face{display:none; flex:1; min-width:0}
 .card.d0 .f0, .card.d1 .f1, .card.d2 .f1, .card.d3 .f3{display:flex}
-.id{font:400 11px/1 var(--font-mono); color:var(--blue-light); letter-spacing:.08em; flex:0 0 auto}
+.id{font:400 11px/1.3 var(--font-mono); color:var(--blue-light); letter-spacing:.08em; flex:0 1 auto; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.id b{font-weight:500; color:var(--ink)}
 .flag{font:400 10px/1.2 var(--font-mono); text-transform:uppercase; letter-spacing:.12em; color:var(--orange)}
 
 /* Condensed band: id | loop | pain -> solution */
@@ -83,7 +84,7 @@ body{
 .closed .scan{color:var(--ink-muted)}
 .d2 .loop, .d2 .flag{display:none} .d2 .f1{padding-block:4px} .d2 .scan{font-size:13.5px}
 .f3{align-items:center; gap:10px; padding:0 14px; font:400 10.5px/1 var(--font-mono); color:var(--ink-subtle); white-space:nowrap; overflow:hidden}
-.f3 .id{font-size:10px; opacity:.8}
+.f3 .id{opacity:.8}
 
 /* Focused card: illustration left, text right, full width */
 .f0{flex-direction:column; gap:12px; padding:16px 18px}
@@ -266,7 +267,7 @@ const cards = S.map((s, i) => {
     sep.dataset.first = i; strip.appendChild(sep); seps.push(sep); }
   const c = document.createElement("article"); c.className = "card" + (closed(s) ? " closed" : ""); c.tabIndex = -1;
   const scan = `${esc(s[4])} <em>→ ${esc(s[5])}</em>`;
-  const id = `<div class="id">${s[0]}</div>`;
+  const id = `<div class="id">${esc(pipeOf(s[1]))} &gt; ${esc(PHASES[s[1]].replace(/^\d+\s+/, ""))} &gt; <b>${esc(s[3])}</b></div>`;
   const kind = kindName(s);
   const lbl = s[2]==="admin" ? "Admin step · closed in this demo" : s[2]==="pointer" ? "Runs on the Liftoff pipeline"
             : "Live session · " + esc(s[8]) + " · closed in this demo";
@@ -281,8 +282,8 @@ const cards = S.map((s, i) => {
          <ul class="lines">${s[7].map(l => `<li>${esc(l)}</li>`).join("")}</ul></div></div>`;
   const loop = `<div class="loop">${closed(s) ? "" : "<i></i><i></i><i></i>"}</div>`;
   c.innerHTML = `<div class="inner">${f0}
-    <div class="face f1">${id}${loop}<div class="txt">${closed(s)?`<div class="flag">${kind}</div>`:""}<div class="scan">${scan}</div></div></div>
-    <div class="face f3">${id}<span>${esc(s[3])}</span></div></div>`;
+    <div class="face f1">${loop}<div class="txt">${id}${closed(s)?`<div class="flag">${kind}</div>`:""}<div class="scan">${scan}</div></div></div>
+    <div class="face f3">${id}</div></div>`;
   c.onclick = () => go(i);
   strip.appendChild(c); return c;
 });
