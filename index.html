@@ -88,7 +88,8 @@ body{
 
 /* Focused card: illustration left, text right, full width */
 .f0{flex-direction:column; gap:12px; padding:16px 18px}
-.f0 .hd{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+.f0 .hd{display:flex; flex-direction:column; align-items:flex-start; gap:6px}
+.f0 .hd .id{max-width:100%}
 .f0 h2{font:500 24px/1.2 var(--font-display); margin:0}
 .f0 .body{flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:24px}
 .anim{background:var(--paper); border-radius:8px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; padding:18px; min-height:0}
@@ -267,15 +268,17 @@ const cards = S.map((s, i) => {
     sep.dataset.first = i; strip.appendChild(sep); seps.push(sep); }
   const c = document.createElement("article"); c.className = "card" + (closed(s) ? " closed" : ""); c.tabIndex = -1;
   const scan = `${esc(s[4])} <em>→ ${esc(s[5])}</em>`;
-  const id = `<div class="id">${esc(pipeOf(s[1]))} &gt; ${esc(PHASES[s[1]].replace(/^\d+\s+/, ""))} &gt; <b>${esc(s[3])}</b></div>`;
+  const path = `${esc(pipeOf(s[1]))} &gt; ${esc(PHASES[s[1]].replace(/^\d+\s+/, ""))}`;
+  const id = `<div class="id">${path} &gt; <b>${esc(s[3])}</b></div>`;   // small tiles: path and step name
+  const crumb = `<div class="id">${path}</div>`;                        // focused card: path only, the title is the heading
   const kind = kindName(s);
   const lbl = s[2]==="admin" ? "Admin step · closed in this demo" : s[2]==="pointer" ? "Runs on the Liftoff pipeline"
             : "Live session · " + esc(s[8]) + " · closed in this demo";
   const f0 = closed(s)
-    ? `<div class="face f0"><div class="hd">${id}<h2>${esc(s[3])}</h2></div>
+    ? `<div class="face f0"><div class="hd">${crumb}<h2>${esc(s[3])}</h2></div>
          <div class="closedbox"><div class="lbl">${lbl}</div>
          <p>${esc(s[9])}</p><div class="pain">Pain: ${esc(s[4])} → ${esc(s[5])}</div></div></div>`
-    : `<div class="face f0"><div class="hd">${id}<h2>${esc(s[3])}</h2></div>
+    : `<div class="face f0"><div class="hd">${crumb}<h2>${esc(s[3])}</h2></div>
          <div class="body"><div class="anim"><div class="bar"></div><div class="tag">Animation placeholder</div>
          <div class="note">This is an animation that shows how our system solves this specific pain point.</div>
          <div class="what">${esc(s[6])}</div></div>
